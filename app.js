@@ -1,9 +1,16 @@
 //package used in this project
 const express = require('express')
 const app = express()
-const port = 3000
+const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const restaurantList = require('./restaurant.json')
+
+mongoose.connect('mongodb://localhost/restaurant_list')
+
+const db = mongoose.connection
+
+db.on('error', () => console.log('mongodb error'))
+db.once('open', () => console.log('mongodb connected'))
 
 //setting template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
@@ -32,6 +39,6 @@ app.get('/search', (req, res) => {
   res.render('index', { restaurants: restaurants })
 })
 
-app.listen(port, () => {
-  console.log(`Express is listening on localhost:${port}`)
+app.listen(3000, () => {
+  console.log('Express is listening on localhost:3000')
 })
