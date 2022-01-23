@@ -66,12 +66,9 @@ app.post('/restaurants', (req, res) => {
 
 app.post('/restaurants/:id/edit', (req, res) => {
   const id = req.params.id
-  Restaurant.findById(id)
-    .then(restaurant => {
-      restaurant = req.body
-      return restaurant.save()
-    })
-    .then(() => res.redirect(`/restaurant/${id}`))
+  const newRestaurantdata = req.body
+  Restaurant.findByIdAndUpdate(id, newRestaurantdata)
+    .then(() => res.redirect(`/restaurants/${id}`))
     .catch(error => console.log(error))
 })
 
