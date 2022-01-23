@@ -1,10 +1,11 @@
 //package used in this project
 const express = require('express')
-const app = express()
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const Restaurant = require('./models/restaurant')
+const app = express()
 
+//setting mongoose
 mongoose.connect('mongodb://localhost/restaurant_list')
 
 const db = mongoose.connection
@@ -48,10 +49,29 @@ app.get('/restaurant/new', (req, res) => {
   res.render('new')
 })
 
+app.get('/restaurants/:id/edit', (req,res) => {
+  const id = req.params.id
+  Restaurant.findById(id)
+    .lean()
+    .then(restaurant => res.render('edit', { restaurant }))
+    .catch(error => console.log(error))
+})
+
 app.post('/restaurants', (req, res) => {
   const restaurant = req.body
   Restaurant.create(restaurant)
     .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+})
+
+app.post('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  Restaurant.findById(id)
+    .then(restaurant => {
+      restaurant = req.body
+      return restaurant.save()
+    })
+    .then(() => res.redirect(`/restaurant/${id}`))
     .catch(error => console.log(error))
 })
 
