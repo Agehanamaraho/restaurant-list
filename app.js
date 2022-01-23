@@ -18,6 +18,7 @@ app.set('view engine', 'handlebars')
 
 //setting static files
 app.use(express.static('public'))
+app.use(express.urlencoded({ extended: true }))
 
 //setting routers
 app.get('/', (req, res) => {
@@ -27,9 +28,9 @@ app.get('/', (req, res) => {
     .catch(error => console.log('error'))
 })
 
-app.get('/restaurants/:id', (req, res) => {  
+app.get('/restaurants/:id', (req, res) => {
   const id = req.params.id
-  return Restaurant.findById(id)
+  Restaurant.findById(id)
     .lean()
     .then(restaurant => res.render('show', { restaurant }))
     .catch(error => console.log('error'))
@@ -41,6 +42,17 @@ app.get('/search', (req, res) => {
     return restaurant.name.toLowerCase().includes(keyword) || restaurant.category.includes(keyword)
   })
   res.render('index', { restaurants: restaurants })
+})
+
+app.get('/restaurant/new', (req, res) => {
+  res.render('new')
+})
+
+app.post('/restaurants', (req, res) => {
+  const restaurant = req.body
+  Restaurant.create(restaurant)
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
 })
 
 app.listen(3000, () => {
