@@ -38,11 +38,16 @@ app.get('/restaurants/:id', (req, res) => {
 })
 
 app.get('/search', (req, res) => {
-  const keyword = req.query.keyword.trim().toLowerCase()
-  const restaurants = restaurantList.results.filter(restaurant => {
-    return restaurant.name.toLowerCase().includes(keyword) || restaurant.category.includes(keyword)
-  })
-  res.render('index', { restaurants: restaurants })
+  const keyword = req.query.keyword.trim()
+  Restaurant.find()
+    .lean()
+    .then(restaurants => {
+      const searchResult = restaurants.filter(restaurant => {
+        return restaurant.name.toLowerCase().includes(keyword.toLowerCase()) || restaurant.category.includes(keyword.toLowerCase())
+      })
+      res.render('index', { restaurants: searchResult, keyword: keyword })
+    })
+    .catch(error => console.log(error))
 })
 
 app.get('/restaurant/new', (req, res) => {
@@ -66,9 +71,12 @@ app.post('/restaurants', (req, res) => {
 
 app.post('/restaurants/:id/edit', (req, res) => {
   const id = req.params.id
-  const newRestaurantdata = req.body
-  Restaurant.findByIdAndUpdate(id, newRestaurantdata)
-    .then(() => res.redirect(`/restaurants/${id}`))
+  Restaurant.findById(id)
+    .then(restaurant => {
+      restaurant = req.body
+      return restaurant.save()
+    })
+    .then(() => res.redirect(`/restaurant/${id}`))
     .catch(error => console.log(error))
 })
 
