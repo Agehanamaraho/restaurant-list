@@ -1,8 +1,10 @@
 //package used in this project
 const express = require('express')
 const mongoose = require('mongoose')
+const methodOverride = require('method-override')
 const exphbs = require('express-handlebars')
 const Restaurant = require('./models/restaurant')
+
 const app = express()
 
 //setting mongoose
@@ -17,7 +19,7 @@ db.once('open', () => console.log('mongodb connected'))
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
-//setting static files
+app.use(methodOverride('_method'))
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 
@@ -69,18 +71,15 @@ app.post('/restaurants', (req, res) => {
     .catch(error => console.log(error))
 })
 
-app.post('/restaurants/:id/edit', (req, res) => {
+app.put('/restaurants/:id', (req, res) => {
   const id = req.params.id
-  Restaurant.findById(id)
-    .then(restaurant => {
-      restaurant = req.body
-      return restaurant.save()
-    })
-    .then(() => res.redirect(`/restaurant/${id}`))
+  const newRestaurantData = req.body
+  Restaurant.findByIdAndUpdate(id, newRestaurantData)
+    .then(() => res.redirect(`/restaurants/${id}`))
     .catch(error => console.log(error))
 })
 
-app.post('/restaurants/:id/delete', (req, res) => {
+app.delete('/restaurants/:id', (req, res) => {
   const id = req.params.id
   Restaurant.findById(id)
     .then(restaurant => restaurant.remove())

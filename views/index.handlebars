@@ -42,7 +42,7 @@
               <div class="d-flex justify-content-end">
                 <a class="mx-2" href="./restaurants/{{this._id}}/edit"><i class="fas fa-pen"></i></a>
                 <a class="mx-2" href="./restaurants/{{this._id}}"><i class="fas fa-info-circle"></i></a>
-                <form action="./restaurants/{{this._id}}/delete" method="post" style="display: inline">
+                <form action="./restaurants/{{this._id}}?_method=delete" method="post" style="display: inline">
                   <button class="btn btn-danger fas fa-trash-alt mx-2" type="submit"></button>
                 </form>
               </div>
