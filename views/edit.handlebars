@@ -1,19 +1,21 @@
-<div class="container my-5">
+<div class="container my-5 needs-validation" id="form" novalidate>
   <h3>修改餐廳資料-{{restaurant.name}}</h3>
   <form action="/restaurants/{{restaurant._id}}?_method=put" method="post">
     <div class="form-group">
       <label for="name" class="form-label">餐廳名稱</label>
       <input class="form-control" name="name" id="name" type="text" maxlength="20" value="{{restaurant.name}}" required>
+      <div class="invalid-feedback">請輸入餐廳名稱</div>
     </div>
 
     <div class="form-group">
       <label for="name_en" class="form-label">餐廳英文名</label>
       <input class="form-control" name="name_en" id="name_en" type="text" maxlength="20" value="{{restaurant.name_en}}" required>
+      <div class="invalid-feedback">請輸入餐廳英文名稱</div>
     </div>
 
     <div class="form-group">
       <label for="category" class="form-label">餐廳類別</label>
-      <input list="category" class="form-control" name="category" value="{{restaurant.category}}">
+      <input list="category" class="form-control" name="category" value="{{restaurant.category}}" required>
       <datalist id="category">
         <option>中東料理</option>
         <option>日本料理</option>
@@ -22,39 +24,48 @@
         <option>酒吧</option>
         <option>咖啡</option>
       </datalist>
+      <div class="invalid-feedback">請選擇餐廳類別</div>
     </div>
 
     <div class="form-group">
       <label for="location" class="form-label">店家地址</label>
       <input class="form-control" name="location" id="location" type="text" maxlength="25" value="{{restaurant.location}}" required>
+      <div class="invalid-feedback">請輸入餐廳地址</div>
     </div>
 
     <div class="form-group">
       <label for="phone" class="form-label">電話號碼</label>
-      <input class="form-control" name="phone" id="phone" type="text" maxlength="15" value="{{restaurant.phone}}" required>
+      <input class="form-control" name="phone" id="phone" type="tel" maxlength="15" value="{{restaurant.phone}}" required>
+      <div class="invalid-feedback">請輸入電話號碼</div>
     </div>
 
     <div class="form-group">
       <label for="rating" class="form-label">餐廳評分</label>
-      <input class="form-control" name="rating" id="rating" type="text" value="{{restaurant.rating}}" required>
+      <input class="form-control" name="rating" id="rating" type="number" step="0.1" min="0" max="5" value="{{restaurant.rating}}" required>
+      <div class="invalid-feedback">請輸入餐廳評分</div>
     </div>
 
     <div class="form-group">
       <label for="image" class="form-label">照片</label>
-      <input class="form-control" name="image" id="image" type="text" value="{{restaurant.image}}" required>
+      <input class="form-control" name="image" id="image" type="url" value="{{restaurant.image}}" required>
+      <div class="invalid-feedback">請輸入餐廳照片網址</div>
     </div>
 
     <div class="form-group">
       <label for="google_map" class="form-label">google map 地圖</label>
-      <input class="form-control" name="google_map" id="google_map" type="text" value="{{restaurant.google_map}}" required>
+      <input class="form-control" name="google_map" id="google_map" type="url" value="{{restaurant.google_map}}" required>
+      <div class="invalid-feedback">請輸入餐廳google map網址</div>
     </div>
 
     <div class="form-group">
       <label for="description">餐廳介紹</label>
-      <textarea class="form-control" id="description" name="description" rows="3">{{restaurant.description}}</textarea>
+      <textarea class="form-control" id="description" name="description" type="text" rows="3" required>{{restaurant.description}}</textarea>
+      <div class="invalid-feedback">請輸入餐廳簡介</div>
     </div>
 
-    <button type="submit" class="btn btn-outline-secondary">送出</button>
-
+    <div class="d-flex justify-content-center">
+      <button type="submit" class="btn btn-outline-secondary mr-2" id="submit-btn">儲存</button>
+      <button class="btn btn-outline-primary ml-2"><a href="/">回首頁</a></button>
+    </div>
   </form>
 </div>
