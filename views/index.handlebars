@@ -9,8 +9,17 @@
             value="{{keyword}}" aria-describedby="search-button">
           <div class="input-group-append">
             <button class="btn btn-major" type="submit" id="search-button"><i class="fas fa-search"></i></button>
-          </div>          
-        </div>
+          </div>
+          <div class="dropdown ml-4">
+            <button class="btn btn-light dropdown-toggle" type="button" id="sort" data-toggle="dropdown" aria-expanded="false">排序</button>
+            <div class="dropdown-menu" aria-labelledby="sort">
+              <a class="dropdown-item" href="/sort/name_en">A > Z</a>
+              <a class="dropdown-item" href="/sort/-name_en">Z > A</a>
+              <a class="dropdown-item" href="/sort/category">類別</a>
+              <a class="dropdown-item" href="/sort/location">地區</a>
+            </div>
+          </div>
+        </div>  
       </form>
     </div>
   </div>
@@ -22,7 +31,7 @@
     <div class="col-md-10 col-12 mx-auto">
       <div class="card-columns">
         {{#each restaurants}}
-        <a href="./restaurants/{{this._id}}" class="text-secondary">
+        <a href="/restaurants/{{this._id}}" class="text-secondary">
           <div class="card mb-3">
             <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}">
 
@@ -39,9 +48,9 @@
               </span>
 
               <div class="d-flex justify-content-end">
-                <a class="mx-2" href="./restaurants/{{this._id}}/edit"><i class="fas fa-pen"></i></a>
-                <a class="mx-2" href="./restaurants/{{this._id}}"><i class="fas fa-info-circle"></i></a>
-                <form action="./restaurants/{{this._id}}?_method=delete" method="post" style="display: inline">
+                <a class="mx-2" href="/restaurants/{{this._id}}/edit"><i class="fas fa-pen"></i></a>
+                <a class="mx-2" href="/restaurants/{{this._id}}"><i class="fas fa-info-circle"></i></a>
+                <form action="/restaurants/{{this._id}}?_method=delete" method="post" style="display: inline">
                   <button class="btn btn-danger fas fa-trash-alt mx-2" type="submit"></button>
                 </form>
               </div>

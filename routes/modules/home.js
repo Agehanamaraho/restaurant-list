@@ -22,4 +22,13 @@ router.get('/search', (req, res) => {
     .catch(error => console.log(error))
 })
 
+router.get('/sort/:type', (req, res) => {
+  const type = req.params.type
+  Restaurant.find()
+    .lean()
+    .sort(type)
+    .then(restaurants => res.render('index', { restaurants }))
+    .catch(error => console.log('error'))
+})
+
 module.exports = router
