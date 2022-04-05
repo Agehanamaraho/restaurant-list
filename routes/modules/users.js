@@ -1,6 +1,7 @@
 const express = require('express')
 const User = require('../../models/user')
 const passport = require('passport')
+const bcrypt = require('bcryptjs')
 const router = express.Router()
 
 router.get('/signin', (req, res) => {
@@ -35,12 +36,15 @@ router.post('/signup', (req, res) => {
     .then(user => {
       if(user) {
         errors.push({ message: '已有此帳號!' })
-        res.render('signup', { errors, name, email, password, confirmPassword })
-      } else {
-        User.create({ name, email, password })
-          .then(() => res.redirect('/'))
-          .catch(error => console.log(error))
+        return res.render('signup', { errors, name, email, password, confirmPassword })
       }
+
+      return bcrypt
+        .genSalt(10)
+        .then(salt => bcrypt.hash(password, salt))
+        .then(hash => User.create({ name, email, password: hash }))
+        .then(() => res.redirect('/'))
+        .catch(error => console.log(error))
     })
     .catch(error => console.log(error))
 })
