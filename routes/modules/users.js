@@ -9,6 +9,7 @@ router.get('/signin', (req, res) => {
 
 router.post('/signin', passport.authenticate('local', {
   successRedirect: '/',
+  failureFlash: true,
   failureRedirect: '/users/signin'
 }))
 
@@ -18,11 +19,23 @@ router.get('/signup', (req, res) => {
 
 router.post('/signup', (req, res) => {
   const { name, email, password, confirmPassword } = req.body
-  
+  const errors = []
+
+  if (!email || !password || !confirmPassword) {
+    errors.push({ message: '請填寫必填欄位!' })
+  }
+  if (password !== confirmPassword) {
+    errors.push({ message: '密碼不相符！' })
+  }
+  if (errors.length) {
+    return res.render('signup', { errors, name, email, password, confirmPassword })
+  }
+
   User.findOne({ email })
     .then(user => {
       if(user) {
-        res.render('signup', { name, email, password, confirmPassword })
+        errors.push({ message: '已有此帳號!' })
+        res.render('signup', { errors, name, email, password, confirmPassword })
       } else {
         User.create({ name, email, password })
           .then(() => res.redirect('/'))
@@ -34,6 +47,7 @@ router.post('/signup', (req, res) => {
 
 router.get('/signout', (req, res) => {
   req.logout()
+  req.flash('success_msg', '已成功登出!')
   res.redirect('/users/signin')
 })
 
