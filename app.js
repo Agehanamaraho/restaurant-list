@@ -5,6 +5,12 @@ const methodOverride = require('method-override')
 const routes = require('./routes')
 const usePassport = require('./config/passport')
 const flash = require('connect-flash')
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+const port = process.env.PORT
 require('./config/mongoose')
 
 const app = express()
@@ -12,7 +18,7 @@ const app = express()
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
-app.use(session({ secret: 'HomoSapiens', resave: false, saveUninitialized: true }))
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: true }))
 app.use(methodOverride('_method'))
 app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
@@ -31,6 +37,6 @@ app.use((req, res, next) => {
 
 app.use(routes)
 
-app.listen(3000, () => {
-  console.log('Express is listening on localhost:3000')
+app.listen(port, () => {
+  console.log(`Express is listening on localhost:${port}`)
 })
