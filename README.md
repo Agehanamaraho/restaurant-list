@@ -6,6 +6,7 @@
 * 新增餐廳
 * 修改餐廳資料
 * 刪除餐廳
+* 可用 email 或 facebook 登入
 ## 開始使用
 1. 安裝 node.js 和 npm
 2. 將專案 clone 到本地
