@@ -7,10 +7,10 @@ router.get('/new', (req, res) => {
   res.render('new')
 })
 
-router.post('/', (req, res) => {
-  const userId = req.user._id
+router.post('/', (req, res) => {  
   const restaurant = req.body
-  Restaurant.create({ restaurant, userId })
+  restaurant.userId = req.user._id
+  Restaurant.create(restaurant)
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
@@ -37,8 +37,8 @@ router.put('/:id', (req, res) => {
   const userId = req.user._id
   const _id = req.params.id
   const newRestaurantData = req.body
-  Restaurant.findOne({ _id, userId })
-    .then(() => res.redirect(`/restaurants/${id}`))
+  Restaurant.findOneAndUpdate({ _id, userId }, newRestaurantData)
+    .then(() => res.redirect(`/restaurants/${_id}`))
     .catch(error => console.log(error))
 })
 
